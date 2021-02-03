@@ -15,5 +15,7 @@ def notify_pp_and_iu():
     
     return jsonify({"msg": "Successfully invalidated position: " + str(position)})
 
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5001)

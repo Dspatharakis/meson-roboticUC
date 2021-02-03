@@ -15,33 +15,8 @@ class ABclient:
 
 		print("Mission:", mission)
 
-		# First, perfom load/unload on current position.
-		# This is the ground truth for our experimantion.
-		# The inv_db represents the AlphaBot's vision.
-		if (self.role == 1): # unloading
-			# read inv.db and convert to integers
-			inv_db = open("inv.txt", "r")
-			str_inv = inv_db.readlines()
-			inv = [int(i) for i in str_inv]
-			print("Inventory before:", inv)
-			print('Inventory in position', self.curr_pos, ':', inv[self.curr_pos])
-
-			# remove one object from the inventory if available
-			if (inv[self.curr_pos] > 0):
-				print('Removing one item...')
-				inv[self.curr_pos] -= 1
-			else:
-				self.inventoryFullyUnloaded(self.curr_pos)
-			# update inv.db
-			print("Inventory after:", inv)
-			inv_db = open("inv.txt", "w")
-			str_inv = [(str(i) + "\n") for i in inv] # back to strings for writing
-			inv_db.writelines(str_inv)
-			inv_db.close
-
-			inv_db = open("inv.txt", "r") # weird bug fix (that blanks the file) TODO: check
-		else: # loading
-			print('Loading')
+		# Invoke Unload Slice
+		res = requests.post('http://localhost:5002/unload', json={"position": self.curr_pos})
 
 		# Then, move to next *valid* position
 		if ((self.curr_pos + 1) > self.end_pos): # if last position of path is reached
@@ -102,7 +77,3 @@ if __name__ == '__main__':
 		ab.move(mission)
 		if (ab.curr_pos == 0): # if alphabot is back to base
 			mission = ab.getMission()
-
-# res = requests.post('http://127.0.0.1:5000/api/add_message/1234', json={"mytext":"lalala"})
-# if res.ok:
-#     print(res.json())
