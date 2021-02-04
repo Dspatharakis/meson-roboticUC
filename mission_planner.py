@@ -48,7 +48,7 @@ def validatePosition():
 	mission_f.writelines(str_mission)
 	mission_f.close
 
-	return "Successfully validated position: " + str(vld_position)
+	return "Successfully validated position:  " + str(vld_position)
 
 if __name__ == '__main__':
 	app.run(host='127.0.0.1', debug=True, port=5000)
