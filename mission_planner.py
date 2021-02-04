@@ -37,12 +37,12 @@ def invalidatePosition():
 def validatePosition():
 	content = request.json
 	vld_position = content['vld_position']
-	mission_f = open("mission.txt", "w")
+	mission_f = open("mission.txt", "r")
 	str_mission = mission_f.readlines()
 	mission = [int(i) for i in str_mission]
 	mission[vld_position] = 1
 
-    # write mission back
+    # Write mission back
 	mission_f = open("mission.txt", "w")
 	str_mission = [(str(i) + "\n") for i in mission] # back to strings for writing
 	mission_f.writelines(str_mission)
