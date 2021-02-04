@@ -3,19 +3,20 @@ import requests
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
-def notify_pp_and_iu():
-    content = request.json
-    position = content['position']
+@app.route('/update_location', methods=['GET', 'POST'])
+def update_location():
+	position = request.get_json()['position']
+	pos_db = open("pos.txt", "w")
+	pos_db.write(str(position))
 
-    print('Notifying Mission Planner to skip position', position, 'in next mission, until loaded.')
-    res = requests.post('http://localhost:5000/invalidate', json={"inv_position": position})
+	return jsonify({"msg": "Localization Successful!"})
 
-    print('Notifying Inventory Unloader to initiate CSC actions to load position', content['position'], '.')
-    
-    return jsonify({"msg": "Successfully invalidated position: " + str(position)})
+@app.route('/get_location')
+def get_location():
+	pos_db = open("pos.txt", "r")
+	str_pos = pos_db.readline()
 
-
+	return jsonify({"position": str_pos})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=5001)
+    app.run(host='127.0.0.1', debug=True, port=5001)

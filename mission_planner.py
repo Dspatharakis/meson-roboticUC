@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 # Return the mission path based on inventory availability
 # 1 - visiting, 0 - not visiting
-@app.route('/mission')
+@app.route('/get_mission')
 def getMission():
     mission_f = open("mission.txt", "r")
     str_mission = mission_f.readlines()
@@ -51,4 +51,4 @@ def validatePosition():
 	return "Successfully validated position: " + str(vld_position)
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', debug=True, port=5000)
+	app.run(host='127.0.0.1', debug=True, port=5000)

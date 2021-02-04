@@ -1,22 +1,19 @@
 import requests
 import time
 
-class ABclient:
-	def __init__(self, role):
-		self.role = role # 0 for loading, 1 for unloading
+class UnloadClient:
+	def __init__(self):
 		self.curr_pos = 0 # AlphaBots starting position 
 		inv_db = open("inv.txt", "r")
 		self.end_pos = len(inv_db.readlines()) - 1 # find length of factory floor path
 		inv_db.close
 
 	def move(self, mission):
-
 		""" Moves AlphaBot to the next position """
-
 		print("Mission:", mission)
 
-		# Invoke Unload Slice
-		res = requests.post('http://localhost:5002/unload', json={"position": self.curr_pos})
+		# First invoke the Unload Component
+		self.unload()
 
 		# Then, move to next *valid* position
 		if ((self.curr_pos + 1) > self.end_pos): # if last position of path is reached
@@ -30,48 +27,37 @@ class ABclient:
 				else:
 					next_pos += 1
 		self.actuate(next_pos)
+		self.updateLocalizer()
 
 		return next_pos
-		
-
+	
 	def actuate(self, next_pos):
 		""" Actually move AlphaBot to next position """
-
-		""" input code here to actually actuate alphabot """
-
+		""" TODO: input code here to actually actuate alphabot """
 		self.curr_pos = next_pos
+		print("Moving to next position...")
 		time.sleep(2) # simulate AlphaBot movement duration
 
-	def updateLocalizer(self, curr_pos):
+	def unload(self):
+		""" Invokes the Unloader Component in the respective Slice """
+		res = requests.post('http://localhost:5002/unload', json={"position": self.curr_pos})
+		if res.ok:
+			print(res.json()['msg'])
 
+	def updateLocalizer(self):
 		""" Invokes the Localizer Component in the respective Slice """
-
-		res = requests.post('http://localhost:5001/', json={"position": curr_pos})
+		res = requests.post('http://localhost:5001/update_location', json={"position": self.curr_pos})
 		if res.ok:
 			print(res.json()['msg'])
 
 	def getMission(self):
-
 		""" Invokes the Mission Planner Component in the respective Slice """
-
-		res = requests.get('http://localhost:5000/mission')
+		res = requests.get('http://localhost:5000/get_mission')
 		if res.ok:
 			return res.json()['mission']
 
-	def inventoryFullyUnloaded(self, curr_pos):
-
-		""" Invokes CSC to notify Inventory Loader Slice """
-
-		print('Inventory in position', curr_pos, 'reached zero. Please Load.')
-		self.updateLocalizer(curr_pos)
-
-
-	def inventoryFullyLoaded(self):
-
-		""" Invokes CSC to notify Inventory Unloader Slice """
-
 if __name__ == '__main__':
-	ab = ABclient(1)
+	ab = UnloadClient()
 	mission = ab.getMission()
 	while(1): # move endlessly
 		ab.move(mission)
