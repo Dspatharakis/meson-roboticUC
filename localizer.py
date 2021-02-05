@@ -3,6 +3,7 @@ import requests
 
 app = Flask(__name__)
 
+# Updates the stored Robot's location in a db.
 @app.route('/update_location', methods=['GET', 'POST'])
 def update_location():
 	position = request.get_json()['position']
@@ -11,6 +12,7 @@ def update_location():
 
 	return jsonify({"msg": "Localization Successful!"})
 
+# Returns the Robot's location to the Unloader Componnent
 @app.route('/get_location')
 def get_location():
 	pos_db = open("pos.txt", "r")

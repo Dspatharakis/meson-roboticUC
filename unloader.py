@@ -4,6 +4,7 @@ import requests
 
 app = Flask(__name__)
 
+# Updates the db and invokes Mission Planner and Loader Component (CSC)
 @app.route('/unload', methods=['GET', 'POST'])
 def unload():
 	position = int(requests.get('http://localhost:5001/get_location').json()['position'])
@@ -39,24 +40,27 @@ def unload():
 
 	return jsonify({"msg": "Unload Successful!"})
 
-# Load Component from respective Slice calls this function to update the db with
+# The Loader Component from respective Slice calls this function to update the db with
 # the new remaining inventory.
 @app.route('/update_inventory', methods=['GET', 'POST'])
 def update_inventory():
 	json = request.get_json()
 	position = json['inv_position']
 	new_inv = json['new_inv']
-	print(json)
-	inv_db = open("inv.txt", "w")
-	# inv_db.seek(0) # fix bug with open file, TODO: probably somehow connects with the bug above
+
+	inv_db = open("inv.txt", "r")
 	str_inv = inv_db.readlines()
-	# print(str_inv)
+	inv = [int(i) for i in str_inv]
+
+	inv_db = open("inv.txt", "w")
+	str_inv = [(str(i) + "\n") for i in inv]
 	str_inv[position] = str(new_inv) + '\n'
-	print(str_inv)
 	inv_db.writelines(str_inv)
 	inv_db.close
 
-	# Invoke mission planner to validate the position.
+	inv_db = open("inv.txt", "r") # weird bug fix (that blanks the file) TODO: check
+
+	# Invoke Mission Planner to validate the position.
 	requests.post('http://localhost:5000/validate', json={"vld_position": position})
 	print("Successfully updated inventory and validated position " + str(position))
 

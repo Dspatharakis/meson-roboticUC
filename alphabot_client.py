@@ -1,6 +1,8 @@
 import requests
 import time
 
+# A client that turns an AlphaBot into an Unload Agent.
+# To be deployed in the Alphabot
 class UnloadClient:
 	def __init__(self):
 		self.curr_pos = 0 # AlphaBots starting position 
