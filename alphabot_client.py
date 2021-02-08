@@ -6,9 +6,7 @@ import time
 class UnloadClient:
 	def __init__(self):
 		self.curr_pos = 0 # AlphaBots starting position 
-		inv_db = open("inv.txt", "r")
-		self.end_pos = len(inv_db.readlines()) - 1 # find length of factory floor path
-		inv_db.close
+		self.end_pos = 3 # find length of factory floor path
 
 	def move(self, mission):
 		""" Moves AlphaBot to the next position """
@@ -37,7 +35,7 @@ class UnloadClient:
 		""" Actually move AlphaBot to next position """
 		""" TODO: input code here to actually actuate alphabot """
 		self.curr_pos = next_pos
-		print("Moving to next position...")
+		print("Moving to next position: " + next_pos)
 		time.sleep(2) # simulate AlphaBot movement duration
 
 	def unload(self):
