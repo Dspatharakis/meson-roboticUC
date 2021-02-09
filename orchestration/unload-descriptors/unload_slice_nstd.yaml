@@ -1,0 +1,33 @@
+# MESON Robotic Use Case Slice Template (Unload)
+nst:
+-   id: unload_slice_nstd
+    name: unload_slice_nstd
+    SNSSAI-identifier:
+        slice-service-type: eMBB
+    quality-of-service:
+        id: 1
+
+    netslice-subnet:
+    -   id: unload_ns
+        is-shared-nss: 'false'
+        description: Unload Service (netslice-subnet)
+        nsd-ref: unload_nsd
+
+
+    netslice-vld:
+    -   id: unload_slice_mgmt
+        name: unload_slice_mgmt
+        type: ELAN
+        mgmt-network: 'true'
+        nss-connection-point-ref:
+        -   nss-ref: unload_ns
+            nsd-connection-point-ref: nsd_cp_mgmt
+
+
+    -   id: unload_slice_data
+        name: unload_slice_data
+        type: ELAN
+        mgmt-network: 'false'
+        nss-connection-point-ref:
+        -   nss-ref: unload_ns
+            nsd-connection-point-ref: nsd_cp_data

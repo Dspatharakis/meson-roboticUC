@@ -1,0 +1,57 @@
+# nsd for MESON Robotic Use Case (Load)
+nsd:nsd-catalog:
+    nsd:
+    -   id: load_nsd
+        name: load_nsd
+        short-name: load_nsd
+        description: NS for MESON Robotic Use Case (Load)
+        vendor: NETMODE
+        version: '1.0'
+
+        connection-point:
+        -   name: nsd_cp_mgmt
+            vld-id-ref: load_nsd_mgmt
+        -   name: nsd_cp_data
+            vld-id-ref: load_nsd_data
+
+
+        # Specify the VNFDs that are part of this NSD
+        constituent-vnfd:
+            # The member-vnf-index needs to be unique, starting from 1
+            # vnfd-id-ref is the id of the VNFD
+            # Multiple constituent VNFDs can be specified
+        -   member-vnf-index: 1
+            vnfd-id-ref: load_vnfd  # Service
+
+
+        vld:
+        # Networks for the VNFs
+        # management
+        -   id: load_nsd_mgmt
+            name: load_nsd_mgmt
+            short-name: load_nsd_mgmt
+            type: ELAN
+            mgmt-network: 'true'
+            # vim-network-name: slicing_mgmt
+            # provider-network:
+            #     segmentation_id:
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: load_vnfd
+                vnfd-connection-point-ref: eth0
+
+
+
+        -   id: load_nsd_data
+            name: load_nsd_data
+            short-name: load_nsd_data
+            type: ELAN
+            # vim-network-name: 
+            # provider-network:
+            #     segmentation_id: 
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: load_vnfd
+                vnfd-connection-point-ref: eth1
+
+

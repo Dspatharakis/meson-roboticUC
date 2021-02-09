@@ -1,0 +1,63 @@
+# VNF Descriptor for MESON robotic use case
+
+vnfd-catalog:
+    vnfd:
+    -   id: robotic_vnfd
+        name: robotic_vnfd
+        short-name: robotic_vnfd
+        description: VNFD for MESON Robotic Use Case
+        vendor: NETMODE
+        version: '1.0'
+
+        vnf-configuration:
+            initial-config-primitive:
+            -   name: config
+                parameter:
+                -   name: ssh-hostname
+                    value: <rw_mgmt_ip>
+                -   name: ssh-username
+                    value: meson
+                -   name: ssh-password
+                    value: ntu@m3s0n
+                seq: '1'
+
+        # Management interface
+        mgmt-interface:
+            cp: eth0
+
+        connection-point:
+        -   name: eth0
+            type: VPORT
+        -   name: eth1
+            type: VPORT
+
+        # Atleast one VDU need to be specified
+        vdu:
+        -   id: robotic_vnfd-VM
+            name: robotic_vnfd-VM
+            description: robotic_vnfd-VM
+            count: 1
+
+            # Flavour of the VM to be instantiated for the VDU
+            # flavor below can fit into m1.micro
+            vm-flavor:
+                vcpu-count: 1
+                memory-mb: 1024
+                storage-gb: 5
+
+            # Image/checksum or image including the full path
+            image: 'Ubuntu-18.04-x86_64'
+
+            interface:
+            # Specify the external interfaces
+            # There can be multiple interfaces defined
+            -   name: eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: eth0
+            -   name: eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: eth1
