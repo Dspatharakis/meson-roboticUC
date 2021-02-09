@@ -50,7 +50,8 @@ osm nsi-create\
 --config "Instantiation_additional_parameters (optional)"
 ```
 
-In the instantiation config a management network for each slice has to be attached in a VIM external network. For example:
+In the instantiation config a management network for each slice has to be attached in a VIM external network. 
+For example:
 ```bash
 --config 'netslice-vld: [{ "name": "load_slice_mgmt", "vim-network-name": <replace_vim_external_network> }]'
 ```
@@ -60,20 +61,19 @@ The CSC service consists of three virtual networks (vlds). One for management an
 Replace the "vim-network-name" parameter in the csc_nsd descriptor at the data networks with the VIM networks, that the Load and Unload slices data vlds are attached.
 
 ```bash
-id: csc_nsd_data_1
+-id: csc_nsd_data_1
             name: csc_nsd_data_1
             short-name: csc_nsd_data_1
             type: ELAN
             # vim-network-name: load_slice_data (example)
-.
-.
-.
+			...
 
-id: csc_nsd_data_2
+-id: csc_nsd_data_2
             name: csc_nsd_data_2
             short-name: csc_nsd_data_2
             type: ELAN
             # vim-network-name: unload_slice_data (example)
+            ...
 ```
 
 Instantiate CSC service:
