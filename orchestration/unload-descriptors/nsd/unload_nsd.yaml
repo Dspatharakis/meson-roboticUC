@@ -1,0 +1,53 @@
+nsd:nsd-catalog:
+    nsd:
+    -   description: NS for MESON Robotic Use Case (Unload)
+        id: unload_nsd
+        name: unload_nsd
+        short-name: unload_nsd
+        vendor: NETMODE
+        version: '1.0'
+
+        connection-point:
+        -   name: nsd_cp_mgmt
+            vld-id-ref: unload_nsd_mgmt
+        -   name: nsd_cp_data
+            vld-id-ref: unload_nsd_data
+        constituent-vnfd:
+        -   member-vnf-index: 1
+            vnfd-id-ref: unload_vnfd
+        -   member-vnf-index: 2
+            vnfd-id-ref: mp_vnfd
+        -   member-vnf-index: 3
+            vnfd-id-ref: loc_vnfd
+
+        vld:
+        -   id: unload_nsd_mgmt
+            mgmt-network: 'true'
+            name: unload_nsd_mgmt
+            short-name: unload_nsd_mgmt
+            type: ELAN
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-connection-point-ref: eth0
+                vnfd-id-ref: unload_vnfd
+            -   member-vnf-index-ref: 2
+                vnfd-connection-point-ref: eth0
+                vnfd-id-ref: mp_vnfd
+            -   member-vnf-index-ref: 3
+                vnfd-connection-point-ref: eth0
+                vnfd-id-ref: loc_vnfd
+        -   id: unload_nsd_data
+            name: unload_nsd_data
+            short-name: unload_nsd_data
+            type: ELAN
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-connection-point-ref: eth1
+                vnfd-id-ref: unload_vnfd
+            -   member-vnf-index-ref: 2
+                vnfd-connection-point-ref: eth1
+                vnfd-id-ref: mp_vnfd
+            -   member-vnf-index-ref: 3
+                vnfd-connection-point-ref: eth1
+                vnfd-id-ref: loc_vnfd
+

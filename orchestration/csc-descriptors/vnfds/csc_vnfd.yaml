@@ -1,0 +1,70 @@
+# VNF Descriptor for MESON CSC Robotic Use Case
+
+vnfd-catalog:
+    vnfd:
+    -   id: csc_vnfd
+        name: csc_vnfd
+        short-name: csc_vnfd
+        description: VNFD for MESON CSC Robotic Use Case
+        vendor: NETMODE
+        version: '1.0'
+
+        vnf-configuration:
+            initial-config-primitive:
+            -   name: config
+                parameter:
+                -   name: ssh-hostname
+                    value: <rw_mgmt_ip>
+                -   name: ssh-username
+                    value: ''
+                -   name: ssh-password
+                    value: ''
+                seq: '1'
+
+        # Management interface
+        mgmt-interface:
+            cp: eth0
+
+        connection-point:
+        -   name: eth0
+            type: VPORT
+        -   name: eth1
+            type: VPORT
+        -   name: eth2
+            type: VPORT
+
+        # Atleast one VDU need to be specified
+        vdu:
+        -   id: csc_vnfd-VM
+            name: csc_vnfd-VM
+            description: csc_vnfd-VM
+            count: 1
+
+            # Flavour of the VM to be instantiated for the VDU
+            # flavor below can fit into m1.micro
+            vm-flavor:
+                vcpu-count: 1
+                memory-mb: 1024
+                storage-gb: 5
+
+            # Image/checksum or image including the full path
+            image: 'Ubuntu-18.04-x86_64'
+
+            interface:
+            # Specify the external interfaces
+            # There can be multiple interfaces defined
+            -   name: eth0
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: eth0
+            -   name: eth1
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: eth1
+            -   name: eth2
+                type: EXTERNAL
+                virtual-interface:
+                    type: VIRTIO
+                external-connection-point-ref: eth2

@@ -1,0 +1,68 @@
+# CSC nsd for MESON Robotic Use Case
+nsd:nsd-catalog:
+    nsd:
+    -   id: csc_nsd
+        name: csc_nsd
+        short-name: csc_nsd
+        description: CSC NS for MESON Robotic Use Case
+        vendor: NETMODE
+        version: '1.0'
+
+        connection-point:
+        -   name: nsd_cp_mgmt
+            vld-id-ref: csc_nsd_mgmt
+        -   name: nsd_cp_data
+            vld-id-ref: csc_nsd_data
+
+
+        # Specify the VNFDs that are part of this NSD
+        constituent-vnfd:
+            # The member-vnf-index needs to be unique, starting from 1
+            # vnfd-id-ref is the id of the VNFD
+            # Multiple constituent VNFDs can be specified
+        -   member-vnf-index: 1
+            vnfd-id-ref: csc_vnfd  # Service
+
+
+        vld:
+        # Networks for the VNFs
+        # management
+        -   id: csc_nsd_mgmt
+            name: csc_nsd_mgmt
+            short-name: csc_nsd_mgmt
+            type: ELAN
+            mgmt-network: 'true'
+            # vim-network-name: slicing_mgmt
+            # provider-network:
+            #     segmentation_id:
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: csc_vnfd
+                vnfd-connection-point-ref: eth0
+
+
+        -   id: csc_nsd_data_1
+            name: csc_nsd_data_1
+            short-name: csc_nsd_data_1
+            type: ELAN
+            # vim-network-name: 
+            # provider-network:
+            #     segmentation_id: 
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: csc_vnfd
+                vnfd-connection-point-ref: eth1
+
+        -   id: csc_nsd_data_2
+            name: csc_nsd_data_2
+            short-name: csc_nsd_data_2
+            type: ELAN
+            # vim-network-name: 
+            # provider-network:
+            #     segmentation_id: 
+            vnfd-connection-point-ref:
+            -   member-vnf-index-ref: 1
+                vnfd-id-ref: csc_vnfd
+                vnfd-connection-point-ref: eth2
+
+

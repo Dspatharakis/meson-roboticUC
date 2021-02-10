@@ -23,7 +23,72 @@ One  of  the  prerequisites,  but  open challenges, for Industry 4.0 is the phys
 * Inventory Load VNF can inform the Inventory Unload VNF for product becoming available. 
 
 
-## Deployment
+
+## Orchestration & Deployment
+
+Open Source MANO (OSM) is used for the service orchestration. For each robotic service, a VNF descriptor file is realized and contains all the necessary information for the VIM (Openstack) to instantiate Virtual Deployment Units (VDUs).
+
+All the descriptors in the orchestration folder have to be onboarded in the OSM(vnfds, nsds and slice templates).
+
+In the yaml vnfd file define an image, which contains the corresponding functionalities for each robotic service and the CSC slice. For example:
+```bash
+# Image/checksum or image including the full path
+image: 'Ubuntu-18.04-x86_64'
+```
+The images have to be uploaded on Openstack.
+
+
+### Instantiation
+
+The load and unload slices are intantiated using the osm-client:
+```bash
+osm nsi-create\
+--nsi_name my_slice_name\
+--nst_name my_slice_ns_template\
+--vim_account "replace_vim_account_name"\
+--ssh_keys "replace_public_key_1","replace_public_key_2"\
+--config "Instantiation_additional_parameters (optional)"
+```
+
+In the instantiation config a management network for each slice has to be attached in a VIM external network. 
+For example:
+```bash
+--config 'netslice-vld: [{ "name": "load_slice_mgmt", "vim-network-name": <replace_vim_external_network> }]'
+```
+
+The CSC service consists of three virtual networks (vlds). One for management and two data networks to be attached in the data networks of the corresponding services.
+
+Replace the "vim-network-name" parameter in the csc_nsd descriptor at the data networks with the VIM networks, that the Load and Unload slices data vlds are attached.
+
+```bash
+-id: csc_nsd_data_1
+            name: csc_nsd_data_1
+            short-name: csc_nsd_data_1
+            type: ELAN
+            # vim-network-name: load_slice_data (example)
+			...
+
+-id: csc_nsd_data_2
+            name: csc_nsd_data_2
+            short-name: csc_nsd_data_2
+            type: ELAN
+            # vim-network-name: unload_slice_data (example)
+            ...
+```
+
+Instantiate CSC service:
+
+```bash
+osm ns-create\
+--ns_name csc_service\
+--nsd_name csc_nsd\
+--vim_account "replace_vim_account_name"\
+--ssh_keys "replace_public_key_1","replace_public_key_2"\
+--config "Instantiation_additional_parameters (optional)"
+```
+
+The result in the Openstack:
+
 
 ![Alt text](img/robotic_uc.png?raw=true "Figure 2: The Network Service of the Robotic Use Case")
 
