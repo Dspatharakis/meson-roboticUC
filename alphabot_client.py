@@ -63,4 +63,4 @@ if __name__ == '__main__':
 		ab.move(mission)
 		if (ab.curr_pos == 0): # if alphabot is back to base
 			mission = ab.getMission()
-		raw_input("Press Enter to continue...") # for debugging purposes
+		input("Press Enter to continue...") # for debugging purposes

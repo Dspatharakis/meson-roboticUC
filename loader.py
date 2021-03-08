@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/load', methods=['GET', 'POST'])
 def load():
 	position = request.get_json()['inv_position']
-	th = threading.Thread(target=threadLoad, args=(position,) # simulates the asynchronus alphabot movement
+	th = threading.Thread(target=threadLoad, args=(position,)) # simulates the asynchronus alphabot movement
 	th.start()
 
 	return jsonify({"msg": "AlphaBot en route to Load Position..."})
