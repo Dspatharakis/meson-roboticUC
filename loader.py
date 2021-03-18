@@ -21,5 +21,10 @@ def threadLoad(position):
 	requests.post('http://localhost:5002/update_inventory', json={"inv_position": position, "new_inv": 3})
 	print("Load Finished in position " + str(position))
 
+@app.route('/load_image', methods=['GET', 'POST'])
+def load_image():
+	print ("image posted")
+	return jsonify({"msg": "Picture validated!..."})
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', debug=True, port=5003)

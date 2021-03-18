@@ -5,8 +5,8 @@ import csv
 app = Flask(__name__)
 
 # Updates the db and invokes Mission Planner and Loader Component (CSC)
-@app.route('/unload', methods=['GET', 'POST'])
-def unload():
+@app.route('/load', methods=['GET', 'POST'])
+def load():
 	position = int(requests.get('http://localhost:5001/get_location').json()['position'])
 	inv_db = open("inv_unloader.txt", "r")
 	str_inv = inv_db.readlines()
@@ -48,7 +48,7 @@ def unload():
 		with open(filename, 'a') as myfile:
 			wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
 			wr.writerow([round(transmission_time,5)])
-	return jsonify({"msg": "Unload Successful!"})
+	return jsonify({"msg": "Load Successful!"})
 
 # The Loader Component from respective Slice calls this function to update the db with
 # the new remaining inventory.
